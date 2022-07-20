@@ -363,9 +363,13 @@ class RenderFunction(torch.autograd.Function):
         filt = diffvg.Filter(filter_type, filter_radius)
 
         start = time.time()
+        if isinstance(pydiffvg.get_device(), int):
+            device = pydiffvg.get_device()
+        else:
+            device = pydiffvg.get_device().index
         scene = diffvg.Scene(canvas_width, canvas_height,
             shapes, shape_groups, filt, pydiffvg.get_use_gpu(),
-            pydiffvg.get_device().index if pydiffvg.get_device().index is not None else -1)
+            device if device is not None else -1)
         time_elapsed = time.time() - start
         global print_timing
         if print_timing:
@@ -621,9 +625,14 @@ class RenderFunction(torch.autograd.Function):
         current_index += 1
         filt = diffvg.Filter(filter_type, filter_radius)
 
+        if isinstance(pydiffvg.get_device(), int):
+            device = pydiffvg.get_device()
+        else:
+            device = pydiffvg.get_device().index
+
         scene = diffvg.Scene(canvas_width, canvas_height,
             shapes, shape_groups, filt, pydiffvg.get_use_gpu(),
-            pydiffvg.get_device().index if pydiffvg.get_device().index is not None else -1)
+            device if device is not None else -1)
 
         if output_type == OutputType.color:
             assert(grad_img.shape[2] == 4)
