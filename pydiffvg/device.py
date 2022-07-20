@@ -18,7 +18,10 @@ def set_device(d):
     global device
     global use_gpu
     device = d
-    use_gpu = device.type == 'cuda'
+    if isinstance(device,int):
+        use_gpu = True
+    else:
+        use_gpu = device.type == 'cuda'
 
 def get_device():
     global device
